@@ -56,4 +56,3 @@ s = Server(
     EVENT_READ,
 )
 s.start()
-_=  "sssddedddddsswwwwwwwwsz"

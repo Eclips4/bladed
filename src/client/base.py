@@ -26,7 +26,7 @@ Type = Union[
 class Client:
     def __init__(
             self,
-            bufsize: int,
+            bufsize: int = 1024,
             ip: str = "localhost",
             port: int = 1234
     ):
