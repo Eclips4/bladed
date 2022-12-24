@@ -1,58 +1,65 @@
-from socket import socket
-from selectors import DefaultSelector, EVENT_READ, EVENT_WRITE
-from typing import Any, Union
+from select import select
+from socket import socket, AF_INET, SOCK_STREAM
+from typing import List
+
+
+def create_new_socket(protocol: int = AF_INET,
+                      stream: int = SOCK_STREAM) -> socket:
+    return socket(protocol, stream)
 
 
 class Server:
     def __init__(self,
-                 _socket: socket,
-                 _selector: DefaultSelector,
-                 bufsize: int,
-                 event: Union[EVENT_READ, EVENT_WRITE],
-                 ip: str = "localhost",
-                 port: int = 1234) -> None:
-        self._socket = _socket
-        self._selector = _selector
-        self.bufsize = bufsize
-        self.event = event
-        self.ip = ip
+                 server_socket: socket,
+                 protocol: int = AF_INET,
+                 stream: int = SOCK_STREAM,
+                 host: str = "localhost",
+                 port: int = 8000,
+                 bufsize: int = 1024) -> None:
+        self._protocol = protocol
+        self._stream = stream
+        self.host = host
         self.port = port
+        self.bufsize = bufsize
+        self._sockets: List[socket] = []
+        self._server_socket = server_socket
 
-    def read(self, conn: socket, _: Any) -> None:
-        data = conn.recv(self.bufsize)
-        if data:
-            print("Echoing", repr(data), "to", conn)
-            conn.send(data)
+    def _accept(self, server_socket: socket) -> None:
+        client_socket, client_address = server_socket.accept()
+        print("Handle and accept connection from", client_address)
+        self._sockets.append(client_socket)
+
+    def _send(self, client_socket: socket) -> None:
+        try:
+            data = client_socket.recv(self.bufsize)
+        except ConnectionError:
+            data = None
+
+        if data is not None:
+            client_socket.send(data)
         else:
-            print("Closing", conn)
-            self._selector.unregister(conn)
-            conn.close()
+            self._sockets.remove(client_socket)
+            client_socket.close()
 
-    def accept(self, sock: socket, _: Any):
-        conn, addr = sock.accept()
-        print("Accepted", conn, "from", addr)
-        conn.setblocking(False)
-        self._selector.register(conn, self.event, self.read)
+    def _setup_server_socket(self) -> None:
+        self._server_socket.bind((self.host, self.port))
+        self._server_socket.setblocking(False)
+        self._server_socket.listen()
+        self._sockets.append(self._server_socket)
 
-    def setup_server(self) -> None:
-        self._socket.bind((self.ip, self.port))
-        self._socket.listen(100)
-        self._socket.setblocking(False)
-        self._selector.register(self._socket, self.event, self.accept)
-
-    def start(self):
-        self.setup_server()
+    def _run_polling(self) -> None:
         while True:
-            events = self._selector.select()
-            for key, mask in events:
-                callback = key.data
-                callback(key.fileobj, mask)
+            readable_scokets, _, _ = select(self._sockets, [], [])
+            for sock in readable_scokets:
+                if sock is self._server_socket:
+                    self._accept(sock)
+                else:
+                    self._send(sock)
 
-
-s = Server(
-    socket(),
-    DefaultSelector(),
-    1024,
-    EVENT_READ,
-)
-s.start()
+    def start(self) -> None:
+        self._setup_server_socket()
+        try:
+            self._run_polling()
+        finally:
+            self._server_socket.close()
+            print("Server socket closed")

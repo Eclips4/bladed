@@ -1,26 +1,4 @@
-from socket import (
-    socket,
-    AF_INET,
-    AF_INET6,
-    SOCK_STREAM,
-    SOCK_DGRAM,
-    SOCK_RAW,
-    SOCK_RDM,
-    SOCK_SEQPACKET,
-)
-from typing import Union
-
-Family = Union[
-    AF_INET,
-    AF_INET6]
-
-Type = Union[
-    SOCK_STREAM,
-    SOCK_DGRAM,
-    SOCK_RAW,
-    SOCK_RDM,
-    SOCK_SEQPACKET
-]
+from socket import socket
 
 
 class Client:
@@ -28,18 +6,20 @@ class Client:
             self,
             bufsize: int = 1024,
             ip: str = "localhost",
-            port: int = 1234
+            port: int = 8000
     ):
         self.bufsize = bufsize
         self.ip = ip
         self.port = port
 
-    def send(self, msg: bytes = b"Hello"):
+    def send(self, msg: bytes = b"Hello") -> bytes:
         sock = socket()
-        sock.connect((self.ip, self.port))
-        sock.sendall(msg)
-        data = sock.recv(self.bufsize)
-        sock.close()
-        return data
-
-
+        try:
+            sock.connect((self.ip, self.port))
+            sock.sendall(msg)
+            data = sock.recv(self.bufsize)
+            return data
+        except ConnectionError:
+            return b"Connection Erorr"
+        finally:
+            sock.close()
