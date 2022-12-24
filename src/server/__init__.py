@@ -1,6 +1,7 @@
-from .base import Server
+from .base import Server, create_new_socket
 
 
 __all__ = [
-    "Server"
+    "Server",
+    "create_new_socket"
 ]

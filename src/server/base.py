@@ -1,3 +1,5 @@
+import logging
+
 from select import select
 from socket import socket, AF_INET, SOCK_STREAM
 from typing import List
@@ -26,7 +28,7 @@ class Server:
 
     def _accept(self, server_socket: socket) -> None:
         client_socket, client_address = server_socket.accept()
-        print("Handle and accept connection from", client_address)
+        logging.info("Handle and accept connection from %s", client_address)
         self._sockets.append(client_socket)
 
     def _send(self, client_socket: socket) -> None:
@@ -48,6 +50,7 @@ class Server:
         self._sockets.append(self._server_socket)
 
     def _run_polling(self) -> None:
+        logging.info("Run polling")
         while True:
             readable_scokets, _, _ = select(self._sockets, [], [])
             for sock in readable_scokets:
@@ -62,4 +65,4 @@ class Server:
             self._run_polling()
         finally:
             self._server_socket.close()
-            print("Server socket closed")
+            logging.info("Server socket closed")

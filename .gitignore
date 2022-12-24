@@ -1,6 +1,5 @@
 __pycache__/
 .pytest_cache/
 venv/
-requirements_dev.txt
 example.py
 .idea/

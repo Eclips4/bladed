@@ -1,8 +1,9 @@
 from .client import Client
-from .server import Server
+from .server import Server, create_new_socket
 
 
 __all__ = [
     "Client",
-    "Server"
+    "Server",
+    "create_new_socket"
 ]
