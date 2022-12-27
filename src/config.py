@@ -10,5 +10,6 @@ def load_config(path: str) -> Preferences:
         destination=(config_data['ip'],
                      int(config_data['port'])
                      ),
-        encoding=config_data['encoding']
+        encoding=config_data['encoding'],
+        header_length=int(config_data['header_length'])
     )
