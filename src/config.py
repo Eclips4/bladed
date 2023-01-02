@@ -11,5 +11,6 @@ def load_config(path: str) -> Preferences:
                      int(config_data['port'])
                      ),
         encoding=config_data['encoding'],
-        header_length=int(config_data['header_length'])
+        header_length=int(config_data['header_length']),
+        threadpool_size=int(config_data['config_data'])
     )

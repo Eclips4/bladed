@@ -11,3 +11,4 @@ class Preferences:
     destination: Destination
     encoding: str
     header_length: int
+    threadpool_size: int
