@@ -1,7 +1,6 @@
-from .base import Server, create_new_socket
+from .base import ThreadPoolServer
 
 
 __all__ = [
-    "Server",
-    "create_new_socket"
+    "ThreadPoolServer",
 ]
