@@ -12,3 +12,4 @@ class Preferences:
     encoding: str
     header_length: int
     threadpool_size: int
+    timeout: float

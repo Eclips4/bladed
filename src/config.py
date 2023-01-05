@@ -12,5 +12,6 @@ def load_config(path: str) -> Preferences:
                      ),
         encoding=config_data['encoding'],
         header_length=int(config_data['header_length']),
-        threadpool_size=int(config_data['config_data'])
+        threadpool_size=int(config_data['threadpool_size']),
+        timeout=float(config_data['timeout'])
     )

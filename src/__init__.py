@@ -1,9 +1,9 @@
-from .client import Client
-from .server import Server, create_new_socket
+from .server import create_server
+from .client import create_client
 
 
 __all__ = [
-    "Client",
-    "Server",
-    "create_new_socket"
+    "create_server",
+    "create_client"
 ]
+

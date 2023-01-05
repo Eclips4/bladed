@@ -3,3 +3,4 @@ __pycache__/
 venv/
 example.py
 .idea/
+.mypy_cache/
