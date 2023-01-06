@@ -1,10 +1,10 @@
-from json import dumps
+import json
 from ..header import make_header
 
 
-def serialize_data_json(data: str | bytes, encoding: str, header_length: int) -> bytes:
-    if isinstance(data, bytes):
-        data = data.decode()
-    encoded_data = dumps(data).encode(encoding)
+def serialize_data_json(data: bytes,
+                        encoding: str,
+                        header_length: int) -> bytes:
+    encoded_data = json.dumps(data.decode(encoding)).encode(encoding)
     header = make_header(len(encoded_data), encoding, header_length)
     return header + encoded_data
