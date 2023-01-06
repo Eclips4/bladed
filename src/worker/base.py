@@ -25,7 +25,7 @@ class SimpleWorker(Worker):
         self._on_message = on_message
 
     def send_message(self, message: bytes) -> None:
-        logger.info("Send message: %s", message)
+        logger.info("Send message: %s, type of message: %s", message, type(message))
         sended = 0
         to_send = create_message(message,
                                  self.message_type,

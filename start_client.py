@@ -8,7 +8,7 @@ def main():
     config = load_config("./config.sample.ini")
     client = create_client(config)
     with client.connect() as connected_client:
-        connected_client.send("""{1: 1}""")
+        connected_client.send(b"{1: 1}")
         response = connected_client.receive_one_message()
         logging.info("Message: %s", response)
         print("Response:", response)

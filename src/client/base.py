@@ -24,8 +24,8 @@ class Client(SimpleWorker):
             self.worker._disconnect()
             self._connection.close()
 
-    def send(self, msg: str):
-        self.worker.send_message(msg.encode())
+    def send(self, msg: bytes):
+        self.worker.send_message(msg)
 
     def receive_one_message(self):
         return self.worker._get_next_message()
