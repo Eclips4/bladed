@@ -13,7 +13,7 @@ logger = getLogger(__name__)
 class Rule:
     message_len: int
     delimiter: bytes
-    extra_step: Callable[[bytes], None] | None = None
+    extra_step: Callable[[bytes], bytes] | None = None
 
 
 class Receiver(Protocol):
@@ -51,4 +51,6 @@ class DefaultReceiver(Receiver):
                 break
             chunks.append(data)
         connection.close()
+        if self.rule.extra_step is not None:
+            return self.rule.extra_step(b"".join(chunks))
         return b"".join(chunks)
