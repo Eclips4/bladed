@@ -1,9 +1,0 @@
-[flake8]
-count=True
-statistics=True
-show-source=True
-
-max-line-length=79
-exclude=
-    venv,
-    .pytest_cache

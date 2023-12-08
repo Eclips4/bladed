@@ -1,9 +1,7 @@
-from .server import create_server
-from .client import create_client
+from .receiver import DefaultReceiver, default_rule
 
 
 __all__ = [
-    "create_server",
-    "create_client"
+    "DefaultReceiver",
+    "default_rule",
 ]
-

@@ -1,0 +1,17 @@
+[build-system]
+# Minimum requirements for the build system to execute.
+requires = ["setuptools"]
+
+[project]
+name = "bladed"
+version = "0.0.1"
+requires-python = ">=3.12"
+
+[project.optional-dependencies]
+dev = [
+    "ruff==0.1.7",
+    "mypy==1.7.1",
+]
+
+[tool.ruff]
+line-length = 120
